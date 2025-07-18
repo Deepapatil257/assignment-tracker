@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Submit Assignment (Student)</title>
+</head>
+<body>
+
+<h2>Submit Assignment (Student)</h2>
+
+<label>Access Token (Student):</label><br>
+<input type="text" id="token" size="100"><br><br>
+
+<label>Assignment ID:</label><br>
+<input type="number" id="assignment_id"><br><br>
+
+<label>Your Submission Content:</label><br>
+<textarea id="content" rows="4" cols="50"></textarea><br><br>
+
+<button onclick="submitAssignment()">Submit Assignment</button>
+
+<p id="response"></p>
+
+<script>
+    function submitAssignment() {
+        const token = document.getElementById('token').value;
+        const assignmentId = document.getElementById('assignment_id').value;
+        const content = document.getElementById('content').value;
+
+        fetch(`http://127.0.0.1:8000/assignments/${assignmentId}/submit`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({
+                content: content
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('response').innerText = JSON.stringify(data, null, 2);
+        });
+    }
+</script>
+
+</body>
+</html>

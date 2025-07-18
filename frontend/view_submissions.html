@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Submissions (Teacher)</title>
+</head>
+<body>
+
+<h2>View Submissions for Assignment</h2>
+
+<label>Access Token (Teacher):</label><br>
+<input type="text" id="token" size="100"><br><br>
+
+<label>Assignment ID:</label><br>
+<input type="number" id="assignment_id"><br><br>
+
+<button onclick="viewSubmissions()">View Submissions</button>
+
+<pre id="response"></pre>
+
+<script>
+function viewSubmissions() {
+    const token = document.getElementById('token').value.trim();
+    const assignmentId = document.getElementById('assignment_id').value.trim();
+
+    if (!token || !assignmentId) {
+        document.getElementById('response').innerText = "Please enter token and assignment ID!";
+        return;
+    }
+
+    fetch(`http://127.0.0.1:8000/assignments/${assignmentId}/submissions`, {
+        method: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + token
+        }
+    })
+    .then(response => {
+        document.getElementById('response').innerText = 'Status: ' + response.status;
+        return response.json();
+    })
+    .then(data => {
+        document.getElementById('response').innerText += '\n' + JSON.stringify(data, null, 2);
+    })
+    .catch(error => {
+        document.getElementById('response').innerText = 'Error: ' + error;
+    });
+}
+</script>
+
+</body>
+</html>

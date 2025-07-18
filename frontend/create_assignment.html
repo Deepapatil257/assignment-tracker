@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Assignment</title>
+</head>
+<body>
+
+<h2>Create Assignment (Teacher)</h2>
+
+<label>Access Token (Teacher):</label><br>
+<input type="text" id="token" size="100"><br><br>
+
+<label>Title:</label><br>
+<input type="text" id="title"><br><br>
+
+<label>Description:</label><br>
+<textarea id="description" rows="4" cols="50"></textarea><br><br>
+
+<button onclick="createAssignment()">Create Assignment</button>
+
+<p id="response"></p>
+
+<script>
+    function createAssignment() {
+        const token = document.getElementById('token').value;
+        const title = document.getElementById('title').value;
+        const description = document.getElementById('description').value;
+
+        fetch('http://127.0.0.1:8000/assignments', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({
+                title: title,
+                description: description
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('response').innerText = JSON.stringify(data, null, 2);
+        });
+    }
+</script>
+
+</body>
+</html>
